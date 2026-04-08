@@ -6,7 +6,5 @@ def create_user(user_data: dict):
 
 
 def get_all_users():
-    users = list(users_collection.find())
-    for user in users:
-        user["_id"] = str(user["_id"])
-    return users
+    return list(users_collection.find())
+
