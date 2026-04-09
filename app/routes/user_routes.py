@@ -1,24 +1,14 @@
 from fastapi import APIRouter
-
-from app.services import user_services
-
-router = APIRouter()
-
-
-from fastapi import APIRouter
+from pydantic import BaseModel
 
 router = APIRouter()
 
-@router.get("/users")
-def get_users():
-    return {"message": "All users"}
+class UserCreate(BaseModel):
+    name: str
+    email: str
+    role: str
 
-# @router.post("/users")
-# def create_user(user):
-#     user_id = user_services.create_user(user.dict())
-#     return {"message": "User created", "id": user_id}
-#
-#
-# @router.get("/users")
-# def get_users():
-#     return user_services.get_all_users()
+
+@router.post("/users")
+def create_user(user: UserCreate):
+    return {"message": "User created", "user": user}
