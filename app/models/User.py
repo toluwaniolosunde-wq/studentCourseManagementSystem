@@ -5,4 +5,5 @@ class User(BaseModel):
     id:str
     name: str
     email:str
+    role: str
     

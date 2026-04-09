@@ -1,12 +1,12 @@
 from fastapi import APIRouter
-from app.schemas.user_schema import UserCreate
+
 from app.services import user_services
 
 router = APIRouter()
 
 
 @router.post("/users")
-def create_user(user: UserCreate):
+def create_user(user):
     user_id = user_services.create_user(user.dict())
     return {"message": "User created", "id": user_id}
 
