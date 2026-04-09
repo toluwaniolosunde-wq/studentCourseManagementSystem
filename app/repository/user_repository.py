@@ -1,28 +1,18 @@
-from mimetypes import init
-
 from app.database import users_collection
 from bson import ObjectId
 
 
-async def create_user(user):
-    result = await users_collection.insert_one(user)
-    return str(result.inserted_id)
+class UserRepository:
 
+    def __init__(self, db):
+        self.collection = db["users"]
 
-async def get_all_users():
-    users = []
-    async for user in users_collection.find():
-        user["id"] = str(user["_id"])
-        users.append(user)
-    return users
+    def create_user(self, user):
+        return self.collection.insert_one(user)
 
+    def get_users(self):
+        return list(self.collection.find())
 
-async def get_user(user_id):
-    user = await users_collection.find_one({"_id": ObjectId(user_id)})
-    if user:
-        user["id"] = str(user["_id"])
-    return user
+    def get_user(self, user_id):
+        return self.collection.find_one({"id": user_id})
 
-git init
-git add .
-git commit -m "Initial commit"

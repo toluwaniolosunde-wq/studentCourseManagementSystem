@@ -3,26 +3,20 @@ from app.database import enrollments_collection
 
 class EnrollmentRepository:
 
-    def __init__(self):
-        self.collection = enrollments_collection
+    def __init__(self, db):
+        self.collection = db["enrollments"]
 
-    def enroll_student(self, data: dict):
-        return self.collection.insert_one(data)
+    def enroll_student(self, enrollment):
+        return self.collection.insert_one(enrollment)
 
-    def find_by_student(self, student_id: str):
+    def get_student_courses(self, student_id):
         return list(self.collection.find({"student_id": student_id}))
 
-    def find_by_course(self, course_id: str):
+    def get_course_students(self, course_id):
         return list(self.collection.find({"course_id": course_id}))
 
-    def find_by_student_and_course(self, student_id: str, course_id: str):
-        return self.collection.find_one({
-            "student_id": student_id,
-            "course_id": course_id
-        })
-
-    def delete_enrollment(self, student_id: str, course_id: str):
-        return self.collection.delete_one({
-            "student_id": student_id,
-            "course_id": course_id
-        })
+    def assign_grade(self, student_id, course_id, grade):
+        return self.collection.update_one(
+            {"student_id": student_id, "course_id": course_id},
+            {"$set": {"grade": grade}}
+        )
